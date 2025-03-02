@@ -249,3 +249,84 @@
     font-size: 14px;
   }
   
+  /* Dark mode styles for spending history page */
+  [data-theme="dark"] .spending-history-section {
+    background-color: #1e1e1e;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  }
+
+  [data-theme="dark"] .spending-history-section h2 {
+    color: #e0e0e0;
+  }
+
+  [data-theme="dark"] .expense-table {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  [data-theme="dark"] .expense-table th {
+    background-color: #333;
+    color: #e0e0e0;
+    border-bottom: 2px solid #444;
+  }
+
+  [data-theme="dark"] .expense-table td {
+    border-bottom: 1px solid #333;
+    color: #e0e0e0;
+  }
+
+  [data-theme="dark"] .expense-table .amount {
+    color: #4caf50;
+  }
+
+  [data-theme="dark"] .no-expenses {
+    background-color: #1e1e1e;
+    border: 1px solid #333;
+  }
+
+  [data-theme="dark"] .no-expenses p {
+    color: #aaa;
+  }
+
+  [data-theme="dark"] .error-message {
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+    border: 1px solid #333;
+  }
+
+  [data-theme="dark"] .filter-controls {
+    background-color: #1e1e1e;
+    border-bottom: 1px solid #333;
+  }
+
+  [data-theme="dark"] .filter-control select {
+    background-color: #2c2c2c;
+    color: #e0e0e0;
+    border: 1px solid #333;
+  }
+
+  [data-theme="dark"] .transactions-container {
+    background-color: #1e1e1e;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  }
+
+  [data-theme="dark"] .transactions-box h4 {
+    color: #e0e0e0;
+  }
+
+  [data-theme="dark"] .transactions-header {
+    background-color: #333;
+    color: #e0e0e0;
+  }
+
+  [data-theme="dark"] .transactions-row:nth-child(even) {
+    background-color: #2a2a2a;
+  }
+
+  [data-theme="dark"] table {
+    border: 1px solid #333;
+  }
+
+  [data-theme="dark"] th {
+    background-color: #333;
+    color: #e0e0e0;
+  }  

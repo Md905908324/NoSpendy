@@ -38,6 +38,10 @@ const Expenses = () => {
     navigate('/leaderboard');
   };
 
+  const handleSettingsClick = () => {
+    navigate('/settings');
+  };
+
   // Redirect to login if not authenticated
   if (!currentUser) {
     navigate("/signin");
@@ -190,10 +194,7 @@ const Expenses = () => {
             <li className="active">Log Expenses</li>
             <li onClick={handleChallengesClick}>Challenges</li>
             <li onClick={handleLeaderboardClick}>Leaderboard</li>
-            <li>Overview</li>
-            <li>Notifications</li>
-            <li>Settings</li>
-            <li>Security</li>
+            <li onClick={handleSettingsClick}>Settings</li>
           </ul>
         </div>
       </aside>

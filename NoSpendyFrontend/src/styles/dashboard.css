@@ -469,3 +469,60 @@ canvas {
   border-bottom: none;
 }
 
+/* Dark mode styles for dashboard */
+[data-theme="dark"] .dashboard {
+  background-color: #121212;
+}
+
+[data-theme="dark"] .stat-card {
+  background-color: #1e1e1e;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="dark"] .stat-card h3 {
+  color: #aaa;
+}
+
+[data-theme="dark"] .stat-card .stat-amount {
+  color: #e0e0e0;
+}
+
+[data-theme="dark"] .dashboard-card {
+  background-color: #1e1e1e;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="dark"] .dashboard-card h2 {
+  color: #e0e0e0;
+}
+
+[data-theme="dark"] .spending-chart-section,
+[data-theme="dark"] .spending-history-section {
+  background-color: #1e1e1e;
+}
+
+[data-theme="dark"] .spending-chart-section h2,
+[data-theme="dark"] .spending-history-section h2 {
+  color: #e0e0e0;
+}
+
+[data-theme="dark"] .expense-table th {
+  background-color: #333;
+  color: #e0e0e0;
+}
+
+[data-theme="dark"] .expense-table td {
+  border-bottom: 1px solid #333;
+  color: #e0e0e0;
+}
+
+[data-theme="dark"] .leaderboard-table th {
+  background-color: #333;
+  color: #e0e0e0;
+}
+
+[data-theme="dark"] .leaderboard-table td {
+  border-bottom: 1px solid #333;
+  color: #e0e0e0;
+}
+

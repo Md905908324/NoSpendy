@@ -253,3 +253,75 @@
 .profile-dropdown-item:last-child {
   color: #e53935;
 }
+
+/* Dark mode styles for leaderboard page */
+[data-theme="dark"] .leaderboard-section {
+  background-color: #1e1e1e;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="dark"] .leaderboard-section h2 {
+  color: #e0e0e0;
+}
+
+[data-theme="dark"] .leaderboard-table {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="dark"] .leaderboard-table th {
+  background-color: #333;
+  color: #e0e0e0;
+  border-bottom: 2px solid #444;
+}
+
+[data-theme="dark"] .leaderboard-table td {
+  border-bottom: 1px solid #333;
+  color: #e0e0e0;
+}
+
+[data-theme="dark"] .leaderboard-table tr:hover {
+  background-color: #2a2a2a;
+}
+
+[data-theme="dark"] .leaderboard-table tr.current-user {
+  background-color: rgba(76, 175, 80, 0.2);
+}
+
+[data-theme="dark"] .time-period-selector button {
+  background-color: #1e1e1e;
+  color: #aaa;
+  border: 1px solid #333;
+}
+
+[data-theme="dark"] .time-period-selector button:hover {
+  background-color: #2a2a2a;
+}
+
+[data-theme="dark"] .time-period-selector button.active {
+  background-color: #4caf50;
+  color: #e0e0e0;
+}
+
+[data-theme="dark"] .error-message {
+  background-color: #1e1e1e;
+  color: #e0e0e0;
+  border: 1px solid #333;
+}
+
+[data-theme="dark"] .profile-dropdown {
+  background-color: #1e1e1e;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  border: 1px solid #333;
+}
+
+[data-theme="dark"] .profile-dropdown-item {
+  color: #e0e0e0;
+}
+
+[data-theme="dark"] .profile-dropdown-item:hover {
+  background-color: #2a2a2a;
+}
+
+[data-theme="dark"] .profile-dropdown-divider {
+  background-color: #333;
+}

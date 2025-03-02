@@ -51,6 +51,10 @@ const Dashboard = () => {
     navigate('/leaderboard');
   };
 
+  const handleSettingsClick = () => {
+    navigate('/settings');
+  };
+
   const handleSignOut = async () => {
     console.log("Sign out initiated");
     try {
@@ -362,10 +366,7 @@ const Dashboard = () => {
             <li onClick={handleLogExpensesClick}>Log Expenses</li>
             <li onClick={handleChallengesClick}>Challenges</li>
             <li onClick={handleLeaderboardClick}>Leaderboard</li>
-            <li>Overview</li>
-            <li>Notifications</li>
-            <li>Settings</li>
-            <li>Security</li>
+            <li onClick={handleSettingsClick}>Settings</li>
           </ul>
         </div>
       </aside>

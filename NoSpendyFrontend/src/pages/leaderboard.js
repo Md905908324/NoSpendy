@@ -72,6 +72,10 @@ const Leaderboard = () => {
     navigate('/expenses');
   };
 
+  const handleSettingsClick = () => {
+    navigate('/settings');
+  };
+
   // Update the time period handler to use the correct endpoints
   const handleTimeFrameChange = (newTimeFrame) => {
     console.log("Changing time frame to:", newTimeFrame);
@@ -132,10 +136,7 @@ const Leaderboard = () => {
             <li onClick={handleLogExpensesClick}>Log Expenses</li>
             <li onClick={handleChallengesClick}>Challenges</li>
             <li className="active">Leaderboard</li>
-            <li>Overview</li>
-            <li>Notifications</li>
-            <li>Settings</li>
-            <li>Security</li>
+            <li onClick={handleSettingsClick}>Settings</li>
           </ul>
         </div>
       </aside>

@@ -280,4 +280,74 @@
     max-width: 100%;
   }
 }
+
+/* Dark mode styles for expenses page */
+[data-theme="dark"] .dashboard {
+  background-color: #121212;
+}
+
+[data-theme="dark"] .main-content {
+  background-color: #121212;
+}
+
+[data-theme="dark"] .topbar {
+  background-color: #1a1a1a;
+  border-bottom: 1px solid #333;
+}
+
+[data-theme="dark"] .topbar h1 {
+  color: #e0e0e0;
+}
+
+[data-theme="dark"] .tabs button {
+  background-color: #1e1e1e;
+  color: #aaa;
+  border: 1px solid #333;
+}
+
+[data-theme="dark"] .tabs button.tab-active {
+  background-color: #333;
+  color: #e0e0e0;
+}
+
+[data-theme="dark"] .expense-form-container,
+[data-theme="dark"] .challenge-container {
+  background-color: #1e1e1e;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="dark"] .expense-form h2,
+[data-theme="dark"] .challenge-form h2 {
+  color: #e0e0e0;
+  border-bottom: 1px solid #333;
+}
+
+[data-theme="dark"] .form-group label,
+[data-theme="dark"] .challenge-form .form-group label {
+  color: #e0e0e0;
+}
+
+[data-theme="dark"] .form-group input,
+[data-theme="dark"] .challenge-form input,
+[data-theme="dark"] .challenge-form select {
+  background-color: #2c2c2c;
+  color: #e0e0e0;
+  border: 1px solid #333;
+}
+
+[data-theme="dark"] .submit-button,
+[data-theme="dark"] .challenge-button {
+  background-color: #4caf50;
+  color: #e0e0e0;
+}
+
+[data-theme="dark"] .submit-button:hover,
+[data-theme="dark"] .challenge-button:hover {
+  background-color: #3d8b40;
+}
+
+[data-theme="dark"] .submit-button:disabled {
+  background-color: #333;
+  color: #777;
+}
   

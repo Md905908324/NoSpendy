@@ -1,0 +1,251 @@
+/* Import dashboard styles for consistency */
+@import './dashboard.css';
+
+/* Overall Page Styling */
+.spendinghistory {
+    background-color: #374028;
+    color: #a5d68a;
+    padding: 40px;
+    min-height: 100vh;
+    text-align: center;
+  }
+  
+  /* Section Headings */
+  h1 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 30px;
+  }
+  
+  h3 {
+    font-size: 1.2rem;
+    color: #cba2f5;
+    margin-bottom: 10px;
+  }
+  
+  /* Overview Chart */
+  .chart-box {
+    display: flex;
+    justify-content: center; /* Centers horizontally */
+    align-items: center; /* Centers vertically */
+    text-align: center;
+  }
+  
+  .overview-image {
+    max-width: 100%; /* Ensures responsiveness */
+    height: auto;
+    display: block;
+  }
+  
+  .chart-box h4 {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #374028;
+  }
+  
+  .chart {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+  }
+  
+  .bars {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    width: 100%;
+    height: 150px;
+    padding: 0 10px;
+  }
+  
+  .bar-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 8%;
+  }
+  
+  .bar {
+    width: 30px;
+    height: 70px;
+    background: #d3d3d3;
+    border-radius: 5px;
+  }
+  
+  .bar.highlighted {
+    background: #6cbf6c;
+    height: 100px;
+  }
+  
+  .month {
+    font-size: 14px;
+    margin-top: 5px;
+    color: #555;
+  }
+  
+  .month.selected {
+    color: #6cbf6c;
+    font-weight: bold;
+  }
+  
+  .highlight {
+    position: absolute;
+    top: 10px;
+    background: #6cbf6c;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 14px;
+  }
+  
+  .transactions-container {
+    margin-top: 20px;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .transactions-box h4 {
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+  
+  .transactions-table {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .transactions-header,
+  .transactions-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .transactions-header {
+    font-weight: bold;
+    background-color: #f5f5f5;
+  }
+  
+  .transactions-row:nth-child(even) {
+    background-color: #fafafa;
+  }
+  
+  .col {
+    flex: 1;
+    padding: 5px;
+    text-align: left;
+    color: green;
+
+  }
+  
+  .col.checkbox {
+    flex: 0.2;
+    color: green;
+
+  }  
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    
+  }
+  
+  th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    color: green;
+  }
+  
+  th {
+    font-weight: bold;
+    color: #555;
+  }
+  
+  /* Additional styles specific to spending history */
+  .spending-history-section {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+  }
+
+  .spending-history-section h2 {
+    font-size: 18px;
+    color: #333;
+    margin-top: 0;
+    margin-bottom: 20px;
+  }
+
+  .expense-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .expense-table th {
+    text-align: left;
+    padding: 12px;
+    background-color: #f5f5f5;
+    color: #333;
+    font-weight: 600;
+  }
+
+  .expense-table td {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+  }
+
+  .expense-table .amount {
+    font-weight: 600;
+    color: #e53935;
+  }
+
+  .no-expenses {
+    text-align: center;
+    padding: 40px 0;
+  }
+
+  .no-expenses p {
+    margin-bottom: 20px;
+    color: #666;
+  }
+
+  .error-message {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    text-align: center;
+  }
+
+  /* Filter controls */
+  .filter-controls {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+
+  .filter-control {
+    padding: 8px 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: white;
+  }
+
+  .filter-control select {
+    border: none;
+    background: transparent;
+    outline: none;
+    font-size: 14px;
+  }
+  

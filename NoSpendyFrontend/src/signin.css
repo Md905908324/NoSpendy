@@ -1,0 +1,90 @@
+/* Sign-In Page Styling */
+.signin-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #a5d68a;
+  }
+  
+  .signin-header {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .signin-header .logo {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .signin-header h1 {
+    font-size: 2rem;
+    font-weight: bold;
+    color: white;
+    margin-top: 10px;
+  }
+  
+  .signin-box {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 500px;
+  }
+  
+  .signin-box h2 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    color: #4d6b4d;
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  label {
+    font-weight: bold;
+    text-align: left;
+    margin-bottom: 5px;
+    color: #4d6b4d;
+  }
+  
+  input {
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  button {
+    background-color: #4d6b4d;
+    color: white;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  button:hover {
+    background-color: #365335;
+  }
+  
+  .signin-links {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+  }
+  
+  .signin-links a {
+    font-size: 0.9rem;
+    color: #4d6b4d;
+    text-decoration: none;
+  }
+  
+  .signin-links a:hover {
+    text-decoration: underline;
+  }
+  

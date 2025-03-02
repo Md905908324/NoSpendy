@@ -1,14 +1,14 @@
-import './App.css';
+import './styles/App.css';
 import React from "react";
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
-import { AuthProvider } from './context/AuthContext';
-import ProtectedRoute from './components/ProtectedRoute';
-import Signin from "./signin"
-import Dashboard from "./dashboard";
-import Expenses from "./expenses";
-import SpendingHistory from './spendinghistory';
-import Createprofile from "./createprofile";
-import Leaderboard from './leaderboard';
+import { AuthProvider } from './context/AuthContext.js';
+import ProtectedRoute from './components/ProtectedRoute.js';
+import Signin from "./pages/signin.js";
+import Dashboard from "./pages/dashboard.js";
+import Expenses from "./pages/expenses.js";
+import SpendingHistory from './pages/spendinghistory.js';
+import Createprofile from "./pages/createprofile.js";
+import Leaderboard from './pages/leaderboard.js';
 
 function App() {
   return (

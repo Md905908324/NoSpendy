@@ -1,17 +1,18 @@
 import React, { useState, useEffect, useContext } from "react";
-import { AuthContext } from "./context/AuthContext";
+import { AuthContext } from "../context/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import "./dashboard.css";
+import "../styles/dashboard.css";
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+import API from "../utils/api";
 
 // Register ChartJS components
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const { currentUser } = useContext(AuthContext);
+  const { currentUser, logout } = useContext(AuthContext);
   const [dashboardData, setDashboardData] = useState({
     totalExpenses: 0,
     spendingChallenge: 0,
@@ -29,6 +30,8 @@ const Dashboard = () => {
   });
   const [userRank, setUserRank] = useState(null);
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
+  const [topSavers, setTopSavers] = useState([]);
+  const [leaderboardLoading, setLeaderboardLoading] = useState(true);
 
   // Navigation handlers
   const handleSpendingHistoryClick = () => {
@@ -48,9 +51,17 @@ const Dashboard = () => {
     navigate('/leaderboard');
   };
 
-  const handleSignOut = () => {
-    localStorage.removeItem('user');
-    navigate('/signin');
+  const handleSignOut = async () => {
+    console.log("Sign out initiated");
+    try {
+      await logout();
+      console.log("Logout successful, navigating to signin page");
+      navigate('/signin');
+    } catch (error) {
+      console.error("Error during logout:", error);
+      // Force navigation to signin even if logout fails
+      navigate('/signin');
+    }
   };
 
   const toggleProfileMenu = () => {
@@ -230,6 +241,34 @@ const Dashboard = () => {
     fetchUserRank();
   }, [currentUser]);
 
+  useEffect(() => {
+    const fetchLeaderboardData = async () => {
+      if (!currentUser) return;
+      
+      try {
+        setLeaderboardLoading(true);
+        // Fetch top savers from the leaderboard API
+        const response = await API.get('/leaderboard/month');
+        console.log("Dashboard leaderboard data:", response.data);
+        
+        // Take only the top 3 for the dashboard display
+        setTopSavers(response.data.slice(0, 3));
+        setLeaderboardLoading(false);
+      } catch (err) {
+        console.error("Error fetching leaderboard for dashboard:", err);
+        // Fallback to sample data if API fails
+        setTopSavers([
+          { username: "SavingQueen", points: 1250, streak: 15 },
+          { username: "BudgetMaster", points: 1100, streak: 12 },
+          { username: "FrugalFriend", points: 950, streak: 10 }
+        ]);
+        setLeaderboardLoading(false);
+      }
+    };
+
+    fetchLeaderboardData();
+  }, [currentUser]);
+
   // Chart configuration
   const chartData = {
     labels: monthlyData.labels,
@@ -313,7 +352,7 @@ const Dashboard = () => {
     <div className="dashboard">
       <aside className="sidebar">
         <div className="sidebar__brand">
-          <img src={`${process.env.PUBLIC_URL}/piggyBankIcon.png`} alt="NoSpendy Logo" className="logo" />
+          <img src={`${process.env.PUBLIC_URL}/assets/piggyBankIcon.png`} alt="NoSpendy Logo" className="logo" />
           <h2>NoSpendy</h2>
         </div>
         <div className="sidebar__menu">
@@ -339,7 +378,7 @@ const Dashboard = () => {
             <div className="profile-container">
               <button className="profile-btn" onClick={toggleProfileMenu}>
                 <img 
-                  src={`${process.env.PUBLIC_URL}/profile_icon.png`} 
+                  src={`${process.env.PUBLIC_URL}/assets/profile_icon.png`} 
                   alt="Profile" 
                   className="profile-img" 
                 />
@@ -395,10 +434,12 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Leaderboard Section */}
-        <div className="leaderboard-section">
+        {/* Top Savers Section */}
+        <div className="dashboard-card">
           <h2>Top Savers</h2>
-          <div className="leaderboard-preview">
+          {leaderboardLoading ? (
+            <p>Loading top savers...</p>
+          ) : (
             <table className="leaderboard-table">
               <thead>
                 <tr>
@@ -409,30 +450,23 @@ const Dashboard = () => {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td className="rank">1</td>
-                  <td className="username">SavingQueen</td>
-                  <td className="points">1250</td>
-                  <td className="streak">15 days</td>
-                </tr>
-                <tr>
-                  <td className="rank">2</td>
-                  <td className="username">BudgetMaster</td>
-                  <td className="points">1100</td>
-                  <td className="streak">12 days</td>
-                </tr>
-                <tr>
-                  <td className="rank">3</td>
-                  <td className="username">FrugalFriend</td>
-                  <td className="points">950</td>
-                  <td className="streak">10 days</td>
-                </tr>
+                {topSavers.map((saver, index) => (
+                  <tr key={index}>
+                    <td>{index + 1}</td>
+                    <td>{saver.username}</td>
+                    <td>{saver.points}</td>
+                    <td>{saver.streak} days</td>
+                  </tr>
+                ))}
               </tbody>
             </table>
-            <div className="view-more">
-              <button onClick={handleLeaderboardClick} className="view-more-btn">View Full Leaderboard</button>
-            </div>
-          </div>
+          )}
+          <button 
+            className="view-all-btn" 
+            onClick={() => navigate('/leaderboard')}
+          >
+            View Full Leaderboard
+          </button>
         </div>
 
         {/* Spending History Section */}

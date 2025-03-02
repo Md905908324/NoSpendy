@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useContext } from "react";
-import { AuthContext } from "./context/AuthContext";
+import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import "./leaderboard.css";
+import "../styles/leaderboard.css";
+import API from "../utils/api";
 
 const Leaderboard = () => {
   const navigate = useNavigate();
@@ -10,150 +11,88 @@ const Leaderboard = () => {
   const [leaderboardData, setLeaderboardData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [timePeriod, setTimePeriod] = useState('month');
+  const [timeFrame, setTimeFrame] = useState("month"); // Default to monthly view
   const [searchQuery, setSearchQuery] = useState('');
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
 
-  // Navigation handlers
-  const handleDashboardClick = () => {
-    navigate('/dashboard');
-  };
-  
-  const handleHistoryClick = () => {
-    navigate('/spendinghistory');
-  };
-  
-  const handleLogExpensesClick = () => {
-    navigate('/expenses');
-  };
-  
-  const handleChallengesClick = () => {
-    navigate('/expenses');
-  };
-
-  // Fetch leaderboard data
+  // Add detailed logging for debugging
   useEffect(() => {
-    const fetchLeaderboard = async () => {
-      if (!currentUser) return;
+    const fetchLeaderboardData = async () => {
+      console.log("Fetching leaderboard data...");
+      console.log("Current user:", currentUser ? { ...currentUser, token: "HIDDEN" } : "No user");
+      console.log("Selected time frame:", timeFrame);
+      
+      if (!currentUser) {
+        console.log("No current user, redirecting to signin");
+        navigate("/signin");
+        return;
+      }
       
       try {
         setLoading(true);
-        // Configure axios with auth header
-        const config = {
-          headers: {
-            Authorization: `Bearer ${currentUser.token}`
-          }
-        };
+        console.log(`Making API request to /leaderboard/${timeFrame}`);
         
-        // Use the correct endpoint based on the selected time period
-        let endpoint;
-        if (timePeriod === 'month') {
-          endpoint = '/api/leaderboard/monthly';
-        } else if (timePeriod === 'global' || timePeriod === 'all') {
-          endpoint = '/api/leaderboard/global';
-        } else {
-          // Default to monthly if we don't have a specific endpoint
-          endpoint = '/api/leaderboard/monthly';
-        }
-        
-        try {
-          // Try with environment variable first
-          const response = await axios.get(`${process.env.REACT_APP_API_URL}${endpoint}`, config);
-          setLeaderboardData(response.data);
-        } catch (apiError) {
-          console.log(`First API attempt failed (${endpoint}), trying relative URL`);
-          // Try with relative URL as fallback
-          const fallbackResponse = await axios.get(endpoint, config);
-          setLeaderboardData(fallbackResponse.data);
-        }
-        
+        // Uncomment the API call and remove the sample data fallback
+        const response = await API.get(`/leaderboard/${timeFrame}`);
+        console.log("Leaderboard API response:", response.status, response.data);
+        setLeaderboardData(response.data);
         setLoading(false);
       } catch (err) {
-        console.error("Error fetching leaderboard:", err);
-        setError("Failed to load leaderboard data. Using sample data instead.");
+        console.error("Error fetching leaderboard data:", err);
+        console.error("Error details:", err.response ? err.response.data : err.message);
         
-        // Provide mock data as fallback
-        const mockData = generateMockDataForPeriod(timePeriod);
-        setLeaderboardData(mockData);
+        // Set error message and use sample data as fallback
+        setError("Failed to load leaderboard data. Using sample data instead.");
+        setLeaderboardData(getSampleLeaderboardData());
         setLoading(false);
       }
     };
 
-    fetchLeaderboard();
-  }, [currentUser, timePeriod]); // Add timePeriod as dependency
+    fetchLeaderboardData();
+  }, [currentUser, timeFrame, navigate]);
 
-  // Update the time period handler to use the correct endpoints
-  const handleTimePeriodChange = async (period) => {
-    setTimePeriod(period);
-    setLoading(true);
-    
-    try {
-      const config = {
-        headers: {
-          Authorization: `Bearer ${currentUser.token}`
-        }
-      };
-      
-      // Map the UI period to the correct API endpoint
-      let endpoint;
-      if (period === 'month') {
-        endpoint = '/api/leaderboard/monthly';
-      } else if (period === 'global' || period === 'all') {
-        endpoint = '/api/leaderboard/global';
-      } else {
-        // Default to monthly if we don't have a specific endpoint
-        endpoint = '/api/leaderboard/monthly';
-      }
-      
-      try {
-        const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}${endpoint}`, 
-          config
-        );
-        setLeaderboardData(response.data);
-      } catch (apiError) {
-        // Try fallback URL
-        const fallbackResponse = await axios.get(endpoint, config);
-        setLeaderboardData(fallbackResponse.data);
-      }
-      
-      setLoading(false);
-    } catch (err) {
-      console.error(`Error fetching ${period} leaderboard:`, err);
-      setError(`Failed to load ${period} leaderboard data. Using sample data.`);
-      
-      // Generate mock data based on the time period
-      const mockData = generateMockDataForPeriod(period);
-      setLeaderboardData(mockData);
-      setLoading(false);
-    }
+  // Navigation handlers
+  const handleDashboardClick = () => {
+    console.log("Navigating to dashboard");
+    navigate('/dashboard');
+  };
+  
+  const handleSpendingHistoryClick = () => {
+    console.log("Navigating to spending history");
+    navigate('/spendinghistory');
+  };
+  
+  const handleLogExpensesClick = () => {
+    console.log("Navigating to expenses");
+    navigate('/expenses');
+  };
+  
+  const handleChallengesClick = () => {
+    console.log("Navigating to challenges");
+    navigate('/expenses');
   };
 
-  // Helper function to generate mock data based on time period
-  const generateMockDataForPeriod = (period) => {
-    // Base mock data
-    const baseMockData = [
-      { username: "SavingQueen", points: 1250, rank: 1, streak: 15 },
-      { username: "BudgetMaster", points: 1100, rank: 2, streak: 12 },
-      { username: "FrugalFriend", points: 950, rank: 3, streak: 10 },
-      { username: "PennyWise", points: 820, rank: 4, streak: 8 },
-      { username: "SaverSam", points: 780, rank: 5, streak: 7 },
-      { username: "ThriftyTom", points: 650, rank: 6, streak: 6 },
-      { username: "EconomyEmma", points: 600, rank: 7, streak: 5 },
-      { username: "BargainBob", points: 550, rank: 8, streak: 4 },
-      { username: "NoSpendyNancy", points: 500, rank: 9, streak: 3 },
-      { username: "CouponCarl", points: 450, rank: 10, streak: 2 }
+  // Update the time period handler to use the correct endpoints
+  const handleTimeFrameChange = (newTimeFrame) => {
+    console.log("Changing time frame to:", newTimeFrame);
+    setTimeFrame(newTimeFrame);
+  };
+
+  // Sample data for fallback
+  const getSampleLeaderboardData = () => {
+    console.log("Using sample leaderboard data");
+    return [
+      { username: "SavingQueen", points: 1250, streak: 15 },
+      { username: "BudgetMaster", points: 1100, streak: 12 },
+      { username: "FrugalFriend", points: 950, streak: 10 },
+      { username: "PennyWise", points: 820, streak: 8 },
+      { username: "SaverSam", points: 780, streak: 7 },
+      { username: "ThriftyTom", points: 650, streak: 6 },
+      { username: "EconomyEmma", points: 600, streak: 5 },
+      { username: "BargainBob", points: 550, streak: 4 },
+      { username: "NoSpendyNancy", points: 500, streak: 3 },
+      { username: "CouponCarl", points: 450, streak: 2 }
     ];
-    
-    // Adjust points based on period
-    const multiplier = period === 'week' ? 0.3 : 
-                      period === 'month' ? 1 : 
-                      period === 'year' ? 3 : 5;
-    
-    return baseMockData.map(user => ({
-      ...user,
-      points: Math.round(user.points * multiplier)
-    }));
   };
 
   // Add this function to filter users by search query
@@ -162,10 +101,9 @@ const Leaderboard = () => {
   );
 
   // Add this function to handle sign out
-  const handleSignOut = () => {
-    // Clear the user from context/local storage
+  const handleSignOut = async () => {
+    console.log("Sign out initiated from leaderboard");
     localStorage.removeItem('user');
-    // Redirect to sign in page
     navigate('/signin');
   };
 
@@ -184,13 +122,13 @@ const Leaderboard = () => {
     <div className="dashboard">
       <aside className="sidebar">
         <div className="sidebar__brand">
-          <img src={`${process.env.PUBLIC_URL}/piggyBankIcon.png`} alt="NoSpendy Logo" className="logo" />
+          <img src={`${process.env.PUBLIC_URL}/assets/piggyBankIcon.png`} alt="NoSpendy Logo" className="logo" />
           <h2>NoSpendy</h2>
         </div>
         <div className="sidebar__menu">
           <ul>
             <li onClick={handleDashboardClick}>Dashboard</li>
-            <li onClick={handleHistoryClick}>History</li>
+            <li onClick={handleSpendingHistoryClick}>History</li>
             <li onClick={handleLogExpensesClick}>Log Expenses</li>
             <li onClick={handleChallengesClick}>Challenges</li>
             <li className="active">Leaderboard</li>
@@ -215,7 +153,7 @@ const Leaderboard = () => {
             <div className="profile-container">
               <button className="profile-btn" onClick={toggleProfileMenu}>
                 <img 
-                  src={`${process.env.PUBLIC_URL}/profile_icon.png`} 
+                  src={`${process.env.PUBLIC_URL}/assets/profile_icon.png`} 
                   alt="Profile" 
                   className="profile-img" 
                 />
@@ -240,26 +178,26 @@ const Leaderboard = () => {
             <h2>Top Savers This Month</h2>
             <div className="time-period-selector">
               <button 
-                className={timePeriod === 'week' ? 'active' : ''} 
-                onClick={() => handleTimePeriodChange('week')}
+                className={timeFrame === 'week' ? 'active' : ''} 
+                onClick={() => handleTimeFrameChange('week')}
               >
                 This Week
               </button>
               <button 
-                className={timePeriod === 'month' ? 'active' : ''} 
-                onClick={() => handleTimePeriodChange('month')}
+                className={timeFrame === 'month' ? 'active' : ''} 
+                onClick={() => handleTimeFrameChange('month')}
               >
                 This Month
               </button>
               <button 
-                className={timePeriod === 'year' ? 'active' : ''} 
-                onClick={() => handleTimePeriodChange('year')}
+                className={timeFrame === 'year' ? 'active' : ''} 
+                onClick={() => handleTimeFrameChange('year')}
               >
                 This Year
               </button>
               <button 
-                className={timePeriod === 'all' ? 'active' : ''} 
-                onClick={() => handleTimePeriodChange('all')}
+                className={timeFrame === 'all' ? 'active' : ''} 
+                onClick={() => handleTimeFrameChange('all')}
               >
                 All Time
               </button>

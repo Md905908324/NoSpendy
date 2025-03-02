@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect } from 'react';
-import axios from 'axios';
+import API from '../utils/api';
 
 export const AuthContext = createContext();
 
@@ -15,19 +15,9 @@ export const AuthProvider = ({ children }) => {
       if (storedUser) {
         try {
           const userData = JSON.parse(storedUser);
-          // Verify the token is still valid with the backend
-          const response = await axios.get('/users/verify-token', {
-            headers: { Authorization: `Bearer ${userData.token}` }
-          });
-          
-          if (response.data.valid) {
-            setCurrentUser(userData);
-          } else {
-            // Token invalid, clear storage
-            localStorage.removeItem('user');
-          }
+          setCurrentUser(userData);
         } catch (error) {
-          console.error("Token verification failed:", error);
+          console.error("User data parsing failed:", error);
           localStorage.removeItem('user');
         }
       }
@@ -40,50 +30,104 @@ export const AuthProvider = ({ children }) => {
   // Register function
   const register = async (userData) => {
     try {
-      const response = await axios.post('/users/register', userData);
-      const user = response.data;
+      console.log("Registration attempt for user:", userData.username);
       
-      // Store user in state and localStorage
-      setCurrentUser(user);
-      localStorage.setItem('user', JSON.stringify(user));
-      setAuthError(null);
-      return user;
+      // Use the API endpoint without /api prefix
+      const response = await API.post('/users/register', userData);
+      
+      console.log("Registration response received:", response.status);
+      
+      if (response.data && response.data.token) {
+        const user = {
+          username: userData.username,
+          token: response.data.token,
+          userId: response.data.userId || response.data._id
+        };
+        
+        console.log("Setting user data in localStorage after registration:", { ...user, token: "HIDDEN" });
+        localStorage.setItem('user', JSON.stringify(user));
+        setCurrentUser(user);
+        setAuthError(null);
+        return user;
+      } else {
+        console.error("Registration response missing token:", response.data);
+        throw new Error("Invalid response from server");
+      }
     } catch (error) {
-      console.error('Registration error:', error);
-      setAuthError(error.response?.data?.error || 'Registration failed');
+      console.error("Registration error details:", error.response ? error.response.data : error.message);
+      setAuthError(error.response ? error.response.data.message : error.message);
       throw error;
     }
   };
 
   // Login function
-  const login = async (username, password) => {
+  const login = async (email, password) => {
     try {
-      const response = await axios.post('/users/login', { username, password });
-      const user = response.data;
+      console.log("Login attempt for email/username:", email);
       
-      // Store user in state and localStorage
-      setCurrentUser(user);
-      localStorage.setItem('user', JSON.stringify(user));
-      setAuthError(null);
-      return user;
+      // Send both username and email to support both login methods
+      const response = await API.post('/users/login', { 
+        username: email, // Use the input as both username and email
+        email: email,
+        password 
+      });
+      
+      console.log("Login response received:", response.status);
+      
+      if (response.data && response.data.token) {
+        const userData = {
+          username: response.data.username || email,
+          token: response.data.token,
+          userId: response.data.userId || response.data._id
+        };
+        
+        console.log("Setting user data in localStorage:", { ...userData, token: "HIDDEN" });
+        localStorage.setItem('user', JSON.stringify(userData));
+        setCurrentUser(userData);
+        setAuthError(null);
+        return userData;
+      } else {
+        console.error("Login response missing token:", response.data);
+        throw new Error("Invalid response from server");
+      }
     } catch (error) {
-      console.error('Login error:', error);
-      setAuthError(error.response?.data?.error || 'Invalid username or password');
+      console.error("Login error details:", error.response ? error.response.data : error.message);
+      setAuthError(error.response ? error.response.data.error : error.message);
       throw error;
     }
   };
 
-  // Logout function
-  const logout = () => {
-    setCurrentUser(null);
-    localStorage.removeItem('user');
-    setAuthError(null);
-  };
-
-  // Add this function to the AuthContext
-  const signOut = () => {
-    setCurrentUser(null);
-    localStorage.removeItem('user');
+  // Logout function - improved with proper cleanup
+  const logout = async () => {
+    try {
+      console.log("Logout initiated");
+      
+      // Only attempt to call logout API if user is logged in
+      if (currentUser && currentUser.token) {
+        try {
+          // Optional: notify backend about logout
+          await API.post('/users/logout');
+          console.log("Backend logout successful");
+        } catch (error) {
+          // Continue with client-side logout even if backend fails
+          console.log("Backend logout failed, continuing with client-side logout");
+        }
+      }
+      
+      // Clear user data regardless of backend response
+      console.log("Clearing user data from state and localStorage");
+      setCurrentUser(null);
+      localStorage.removeItem('user');
+      setAuthError(null);
+      
+      return true;
+    } catch (error) {
+      console.error("Logout error:", error);
+      // Still clear data on error
+      setCurrentUser(null);
+      localStorage.removeItem('user');
+      return false;
+    }
   };
 
   const value = {
@@ -93,8 +137,7 @@ export const AuthProvider = ({ children }) => {
     register,
     loading,
     authError,
-    setAuthError,
-    signOut
+    setAuthError
   };
 
   return (

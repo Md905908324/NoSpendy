@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "./context/AuthContext";
-import "./expenses.css";
+import { AuthContext } from "../context/AuthContext";
+import "../styles/expenses.css";
 import axios from "axios";
 
 const Expenses = () => {
@@ -180,7 +180,7 @@ const Expenses = () => {
     <div className="dashboard">
       <aside className="sidebar">
         <div className="sidebar__brand">
-          <img src={`${process.env.PUBLIC_URL}/piggyBankIcon.png`} alt="NoSpendy Logo" className="logo" />
+          <img src={`${process.env.PUBLIC_URL}/assets/piggyBankIcon.png`} alt="NoSpendy Logo" className="logo" />
           <h2>NoSpendy</h2>
         </div>
         <div className="sidebar__menu">
@@ -205,7 +205,7 @@ const Expenses = () => {
             <input type="text" placeholder="Search" />
             <button className="profile-btn">
               <img
-                src={`${process.env.PUBLIC_URL}/profile_icon.png`}
+                src={`${process.env.PUBLIC_URL}/assets/profile_icon.png`}
                 alt="Profile"
                 className="profile-img"
               />
